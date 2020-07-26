@@ -2,7 +2,8 @@
     <form (ngSubmit)="addPlayer()" class="flex-container">
         <input type="text" name="newPlayerName" [(ngModel)]="newPlayerName" style="width: 90%; margin-top: 10px; height: 30px; border:solid 1px;" placeholder="Enter a new player name and hit `Retern`">
         
-    <div class="error" *ngIf="!playNameOk">name is requried</div>
+    <div class="error" *ngIf="playNameEmpty">name is requried</div>
+    <div class="error" *ngIf="playNameDuplicate">name already exists</div>
 
 
     </form>

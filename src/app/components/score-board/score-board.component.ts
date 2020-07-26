@@ -10,13 +10,14 @@ export class ScoreBoardComponent implements OnInit {
   newPlayerName = '';
   players: Player[] = [];
   doubleScore = 1;
-  playNameOk = true;
+  playNameEmpty = false;
+  playNameDuplicate = false;
   highestScoreName = 'Me';
 
   constructor() { }
 
   ngOnInit(): void {
-    
+
     this.players.push({playerName: 'Me', playerScores: [],  roundScore: undefined, totalScore: 0, rank: 0});
     /*
     this.players.push({playerName: 'Mike', playerScores: [20, 30, 50],  roundScore: 0, totalScore: 0});
@@ -26,16 +27,12 @@ export class ScoreBoardComponent implements OnInit {
   }
 
   addPlayer(){
-    if (this.newPlayerName === ''){
-      this.playNameOk = false;
-    }
-    else{
-      this.playNameOk = true;
-
-    }
+    // validate name
+    this.playNameDuplicate = this.players.map(p => p.playerName).includes(this.newPlayerName);
+    this.playNameEmpty = this.newPlayerName === '';
 
 
-    if (this.playNameOk){
+    if (!this.playNameEmpty && !this.playNameDuplicate){
       this.players.push({playerName: this.newPlayerName, playerScores: [],  roundScore: undefined, totalScore: 0, rank: 0});
       this.newPlayerName = '';
     }
@@ -48,7 +45,7 @@ export class ScoreBoardComponent implements OnInit {
 
   addRound(){
     this.players.forEach((p) => {
-      
+
       if (p.roundScore === undefined) {
         p.roundScore = 0;
       }
@@ -71,15 +68,16 @@ export class ScoreBoardComponent implements OnInit {
 
   });
 
-  for(let i = 0; i < this.players.length; i++){
+    for (let i = 0; i < this.players.length; i++){
     this.players[i].rank = i;
   }
   }
 
+  // tslint:disable-next-line: typedef
   timesTwo(){
     this.doubleScore = this.doubleScore * 2;
   }
-
+  
   restScores(){
     const r = confirm('Remove all score history?');
     if (r){
@@ -95,14 +93,14 @@ export class ScoreBoardComponent implements OnInit {
       this.players.forEach(p => {
           if (p.playerScores.length > 0) {
             console.log(p.playerScores);
-            p.playerScores = p.playerScores.slice(0,-1);
+            p.playerScores = p.playerScores.slice(0, -1);
             p.totalScore = this.getPlayerTotalScore(p);
             console.log(p.playerScores);
           }
       });
       this.sortPlayers();
     }
-
   }
+
 
 }
