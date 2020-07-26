@@ -1,0 +1,30 @@
+<div>
+    <form (ngSubmit)="addPlayer()" class="flex-container">
+        <input type="text" name="newPlayerName" [(ngModel)]="newPlayerName" style="width: 90%; margin-top: 10px; height: 30px; border:solid 1px;" placeholder="Enter a new player name and hit `Retern`">
+        
+    <div class="error" *ngIf="!playNameOk">name is requried</div>
+
+
+    </form>
+    <div class="flex-container">
+        <div *ngFor="let p of players" class="flex-item">
+            <div class="player-name theme-color">{{p.playerName}} &nbsp;&nbsp;(Score: {{p.totalScore}})</div>
+            <div *ngFor="let s of p.playerScores" class="row">
+                <div class="score">{{s}}</div>
+            </div>
+            <input type="text" pattern="\d*" [name]="p.playerName" [(ngModel)]="p.roundScore" class="round-score"  placeholder="type current round score (default 0)">
+        </div>
+
+    </div>
+    <div class="next-round-container">
+        <input type="button" value="x {{doubleScore}}" (click)="timesTwo()" class="btn" style="background-image: url(/assets/bomb.svg); width: 36%;">
+
+        <input type="button" value="Finish Round" (click)="addRound()" class="btn" style="background-image: url(/assets/check.svg); width: 64%; background-color: #33a532; font-size: large;">
+    </div>
+    <div class="next-round-container">
+        <input type="button" value="Undo" (click)="undoLastScores()" class="btn warning" style="background-image: url(/assets/undo.svg);">
+        <input type="button" value="Reset" (click)="restScores()" class="btn warning" style="background-image: url(/assets/reset.svg);">
+    </div>
+    
+
+</div>
