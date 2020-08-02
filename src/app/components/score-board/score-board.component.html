@@ -9,11 +9,11 @@
     </form>
     <div class="flex-container">
         <div *ngFor="let p of players" class="flex-item">
-            <div class="player-name theme-color">{{p.playerName}} &nbsp;&nbsp;(Score: {{p.totalScore}})</div>
+            <div class="player-name theme-color" (click)="focusText(p.playerName)">{{p.playerName}} &nbsp;&nbsp;(Score: {{p.totalScore}})</div>
             <div *ngFor="let s of p.playerScores" class="row">
                 <div class="score">{{s}}</div>
             </div>
-            <input type="text" pattern="\d*" [name]="p.playerName" [(ngModel)]="p.roundScore" class="round-score"  placeholder="type current round score (default 0)">
+            <input type="text" pattern="\d*" [name]="p.playerName" [(ngModel)]="p.roundScore" class="round-score"  placeholder="type current round score (default 0)" [id]="p.playerName">
         </div>
 
     </div>

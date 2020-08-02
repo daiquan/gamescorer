@@ -102,5 +102,9 @@ export class ScoreBoardComponent implements OnInit {
     }
   }
 
+  focusText(p){
+    document.getElementById(p).focus();
+  }
+
 
 }
