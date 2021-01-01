@@ -42,6 +42,7 @@ export class ScoreBoardComponent implements OnInit {
       this.players.push({playerName: this.newPlayerName, playerScores: [],  roundScore: undefined, totalScore: 0, rank: 0});
       this.newPlayerName = '';
     }
+    this.savePlayerScores();
 
   }
 
