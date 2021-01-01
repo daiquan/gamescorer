@@ -13,12 +13,18 @@ export class ScoreBoardComponent implements OnInit {
   playNameEmpty = false;
   playNameDuplicate = false;
   highestScoreName = 'Me';
-
+  scoreDB = window.localStorage;
   constructor() { }
 
   ngOnInit(): void {
 
-    this.players.push({playerName: 'Me', playerScores: [],  roundScore: undefined, totalScore: 0, rank: 0});
+    if(this.scoreDB && this.scoreDB.getItem('score')){
+      this.players = JSON.parse(this.scoreDB.getItem('score'));
+    }
+    else{
+      this.players.push({playerName: 'Me', playerScores: [],  roundScore: undefined, totalScore: 0, rank: 0});
+    }
+    
     /*
     this.players.push({playerName: 'Mike', playerScores: [20, 30, 50],  roundScore: 0, totalScore: 0});
     this.players.push({playerName: 'Jony', playerScores: [20, 30, 50],  roundScore: 0, totalScore: 0});
@@ -52,10 +58,12 @@ export class ScoreBoardComponent implements OnInit {
       p.playerScores.push(p.roundScore * this.doubleScore);
       p.roundScore = undefined;
       p.totalScore = this.getPlayerTotalScore(p);
+
     });
 
     this.sortPlayers();
     this.doubleScore = 1;
+    this.savePlayerScores();
   }
   sortPlayers() {
     this.players.sort((a, b) => {
@@ -85,7 +93,14 @@ export class ScoreBoardComponent implements OnInit {
         p.playerScores = [];
         p.totalScore = 0;
       });
+      this.savePlayerScores();
     }
+  }
+
+  savePlayerScores(){
+    if(this.scoreDB){
+      this.scoreDB.setItem('score', JSON.stringify(this.players));
+    } 
   }
 
   undoLastScores() {
@@ -99,11 +114,20 @@ export class ScoreBoardComponent implements OnInit {
           }
       });
       this.sortPlayers();
+      this.savePlayerScores();
     }
   }
 
   focusText(p){
     document.getElementById(p).focus();
+  }
+
+  removePlayer(delPlayer:Player){
+    if (confirm('Remove this player?')){
+      this.players = this.players.filter(p=>p.playerName != delPlayer.playerName);
+      this.sortPlayers();
+      this.savePlayerScores();
+    }
   }
 
 
