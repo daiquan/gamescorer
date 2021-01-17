@@ -14,15 +14,13 @@ export class ScoreBoardComponent implements OnInit {
   playNameDuplicate = false;
   highestScoreName = 'Me';
   scoreDB = window.localStorage;
+  MAX_SCORE_SIZE = 4;
   constructor() { }
 
   ngOnInit(): void {
 
     if(this.scoreDB && this.scoreDB.getItem('score')){
       this.players = JSON.parse(this.scoreDB.getItem('score'));
-    }
-    else{
-      this.players.push({playerName: 'Me', playerScores: [],  roundScore: undefined, totalScore: 0, rank: 0});
     }
     
     /*
@@ -39,7 +37,7 @@ export class ScoreBoardComponent implements OnInit {
 
 
     if (!this.playNameEmpty && !this.playNameDuplicate){
-      this.players.push({playerName: this.newPlayerName, playerScores: [],  roundScore: undefined, totalScore: 0, rank: 0});
+      this.players.push({playerName: this.newPlayerName, playerScores: [],  roundScore: undefined, totalScore: 0, rank: 0, hideHistory: false});
       this.newPlayerName = '';
     }
     this.savePlayerScores();
@@ -60,6 +58,8 @@ export class ScoreBoardComponent implements OnInit {
       p.roundScore = undefined;
       p.totalScore = this.getPlayerTotalScore(p);
 
+      p.hideHistory = p.playerScores.length > this.MAX_SCORE_SIZE;
+
     });
 
     this.sortPlayers();
@@ -75,11 +75,11 @@ export class ScoreBoardComponent implements OnInit {
         return 1;
       }
 
-  });
+    });
 
     for (let i = 0; i < this.players.length; i++){
-    this.players[i].rank = i;
-  }
+      this.players[i].rank = i;
+    }
   }
 
   // tslint:disable-next-line: typedef
@@ -93,8 +93,10 @@ export class ScoreBoardComponent implements OnInit {
       this.players.forEach( p => {
         p.playerScores = [];
         p.totalScore = 0;
+        p.hideHistory = false;
       });
       this.savePlayerScores();
+      
     }
   }
 
@@ -113,6 +115,7 @@ export class ScoreBoardComponent implements OnInit {
             p.totalScore = this.getPlayerTotalScore(p);
             console.log(p.playerScores);
           }
+          p.hideHistory = p.playerScores.length > this.MAX_SCORE_SIZE;
       });
       this.sortPlayers();
       this.savePlayerScores();
@@ -121,6 +124,7 @@ export class ScoreBoardComponent implements OnInit {
 
   focusText(p){
     document.getElementById(p).focus();
+    
   }
 
   removePlayer(delPlayer:Player){
@@ -129,6 +133,10 @@ export class ScoreBoardComponent implements OnInit {
       this.sortPlayers();
       this.savePlayerScores();
     }
+  }
+
+  toggleShowHideScores(p:Player){
+    p.hideHistory = !p.hideHistory;
   }
 
 

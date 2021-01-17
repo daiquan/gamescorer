@@ -4,4 +4,5 @@ export class Player{
     roundScore: number;
     totalScore: number;
     rank: number;
+    hideHistory: boolean;
 }

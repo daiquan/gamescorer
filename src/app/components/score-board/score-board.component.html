@@ -9,9 +9,10 @@
     </form>
     <div class="flex-container">
         <div *ngFor="let p of players" class="flex-item">
-            <div class="player-name theme-color" (click)="focusText(p.playerName)">{{p.playerName}} &nbsp;&nbsp;(Score: {{p.totalScore}})<span style="float: right;" (click)="removePlayer(p)">X</span></div>
-            <div *ngFor="let s of p.playerScores" class="row">
-                <div class="score">{{s}}</div>
+            <div class="player-name theme-color" (click)="focusText(p.playerName)" (click)="toggleShowHideScores(p)">{{p.playerName}} &nbsp;&nbsp;(Score: {{p.totalScore}})<span style="float: right;" (click)="removePlayer(p)">X</span></div>
+            <div *ngIf="p.hideHistory">......</div>
+            <div *ngFor="let s of p.playerScores; let i = index" class="row">
+                <div class="score" *ngIf="i>=p.playerScores.length-3 || !p.hideHistory">{{s}}</div>
             </div>
             <input type="text" pattern="\d*" [name]="p.playerName" [(ngModel)]="p.roundScore" class="round-score"  placeholder="type current round score (default 0)" [id]="p.playerName">
         </div>
